@@ -64,6 +64,8 @@ form.addEventListener('submit', e => {
     }
 });
 
+
+// >> this the code from the video lecture.
 // const returnMovies = async (url) => {
 //     await fetch(url)
 //         .then(res => res.json())
@@ -105,16 +107,16 @@ form.addEventListener('submit', e => {
 //         })
 // };
 
-returnMovies(API_LINK);
+// returnMovies(API_LINK);
 
-form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    main.innerHTML = '';
+// form.addEventListener('submit', (e) => {
+//     e.preventDefault();
+//     main.innerHTML = '';
 
-    const searchItem = search.value;
+//     const searchItem = search.value;
 
-    if (searchItem) {
-        returnMovies(SEARCH_API + searchItem);
-        search.value = "";
-    }
-});
+//     if (searchItem) {
+//         returnMovies(SEARCH_API + searchItem);
+//         search.value = "";
+//     }
+// });
