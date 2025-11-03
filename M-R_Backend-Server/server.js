@@ -1,8 +1,8 @@
 // console.log(`hello, Backend-Server`);
-import { express } from "express";
-import { cors } from "cors";
+import express from "express";
+import cors from "cors";
 
-import { review } from "./api/reviews.route.js";
+import { review } from "./api/review.route.js";
 
 const app = express();
 
@@ -10,8 +10,8 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/v1/reviews", review);
-app.use("*", (req, res) => {
-    res.status(404).json({error: 'not found'});
+app.use((req, res) => {
+    res.status(404).json({error: 'There is no error here.'});
 })
 
 export default app;
