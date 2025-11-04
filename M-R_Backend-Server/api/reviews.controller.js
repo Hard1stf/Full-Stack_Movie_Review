@@ -1,4 +1,4 @@
-import ReviewDAO from '../dao/reviewsDAO.js'; 1
+import ReviewDAO from '../dao/reviewsDAO.js';
 
 export default class ReviewsController {
 
@@ -14,9 +14,10 @@ export default class ReviewsController {
                 user,
                 review
             )
-            res.json({ status: 'success' });
+            console.log(reviewResponse);
+            res.json({ status: 'success', insertedId: reviewResponse.insertedId });
         } catch (error) {
-            res.status(500).json({ error: e.message });
+            res.status(500).json({ error: error.message });
         }
     }
 
@@ -29,7 +30,7 @@ export default class ReviewsController {
             res.json(review);
         } catch (error) {
             console.log(`api: ${error}`);
-            res.status(500).json({ error: error });
+            res.status(500).json({ error: error.message });
         }
     }
 
@@ -55,7 +56,7 @@ export default class ReviewsController {
                 throw new Error('Unable to update review.');
             }
 
-            res.jon({ status: 'success' })
+            res.json({ status: 'success' })
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
@@ -73,17 +74,17 @@ export default class ReviewsController {
     }
 
     // get the list of all reviews controller logic: get all the reviews of the specific movie and there movieId
-    static async apiGetReviews(req, res, next){
+    static async apiGetReviews(req, res, next) {
         try {
             let id = req.params.id || {};
             let reviews = await ReviewDAO.getReviewsByMovieId(id);
 
-            if(!reviews) return res.status(404).json({error: "Not found"});
+            if (!reviews) return res.status(404).json({ error: "Not found" });
 
             res.json(reviews);
         } catch (error) {
             console.log(`api: ${error}`);
-            res.status(500).json({error: error});   
+            res.status(500).json({ error: error });
         }
     }
 }
