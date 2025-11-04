@@ -11,7 +11,7 @@ app.use(express.json());
 
 app.use("/api/v1/reviews", review);
 app.use((req, res) => {
-    res.status(404).json({error: 'There is no error here.'});
+    res.status(404).json({error: 'No error found'});
 })
 
 export default app;
