@@ -31,7 +31,10 @@ export default class ReviewDAO {
 
     static async getReview(reviewId) {
         try {
+            // Validate the id before constructing ObjectId to avoid runtime errors.
+            // ObjectId.isValid prevents trying to create a new ObjectId from an invalid string.
             if (!ObjectId.isValid(reviewId)) return null;
+            // Use `new ObjectId(...)` because ObjectId is a class in the current driver.
             return await reviews.findOne({ _id: new ObjectId(reviewId) });
         } catch (error) {
             console.error(`Unable to get review: ${error}`);
@@ -41,6 +44,7 @@ export default class ReviewDAO {
 
     static async updateReview(reviewId, user, review) {
         try {
+            // Validate and construct ObjectId for the update query.
             if (!ObjectId.isValid(reviewId)) return { error: 'invalid id' };
             const updateResponse = await reviews.updateOne(
                 { _id: new ObjectId(reviewId) },
@@ -56,6 +60,7 @@ export default class ReviewDAO {
 
     static async deleteReview(reviewId) {
         try {
+            // Same validation for delete: return helpful error if id is invalid.
             if (!ObjectId.isValid(reviewId)) return { error: 'invalid id' };
             const deleteResponse = await reviews.deleteOne({
                 _id: new ObjectId(reviewId)
@@ -70,6 +75,9 @@ export default class ReviewDAO {
 
     static async getReviewsByMovieId(movieId) {
         try {
+            // movieId in the database is stored as a number. To ensure the
+            // query matches, parse the incoming movieId to an integer.
+            // This avoids type mismatch where '12' (string) wouldn't match 12 (number).
             const cursor = await reviews.find({ movieId: parseInt(movieId) });
             // console.log(cursor);
             return cursor.toArray();
