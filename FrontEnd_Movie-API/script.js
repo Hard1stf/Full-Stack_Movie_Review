@@ -11,7 +11,7 @@ const search = document.getElementById('query');
 async function returnMovies(url) {
     try {
         const res = await fetch(url);
-        if(!res.ok) throw new Error(`HTTP ${res.status}`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
         console.log(data.results);
 
@@ -37,7 +37,14 @@ async function returnMovies(url) {
 
             const title = document.createElement('h3');
             title.className = 'movie-title';
-            title.textContent = movie.title || `Undefined`;
+            // encode the title and use & between query params
+            // Explanation: the original code used `$title=` which produced a broken
+            // query string and made `movie.html` read undefined for `title`.
+            // encodeURIComponent ensures special characters/spaces in the title
+            // don't break the URL. We also use '&' to separate query params.
+            const safeTitle = encodeURIComponent(movie.title || '');
+            title.innerHTML = `${movie.title || 'Undefined'}<br>
+                            <a href="movie.html?id=${movie.id}&title=${safeTitle}">reviews</a>`;
 
             card.appendChild(img);
             card.appendChild(title);
@@ -51,72 +58,15 @@ async function returnMovies(url) {
         console.error('Failed to load movies', error);
         main.innerHTML = '<p>Unable to load movies. Try again Later.</p>';
     }
-} 
+}
 
 returnMovies(API_LINK);
 
 form.addEventListener('submit', e => {
     e.preventDefault();
     const searchItem = search.value.trim();
-    if(searchItem) {
+    if (searchItem) {
         returnMovies(SEARCH_API + encodeURIComponent(searchItem));
         search.value = '';
     }
 });
-
-
-// >> this the code from the video lecture.
-// const returnMovies = async (url) => {
-//     await fetch(url)
-//         .then(res => res.json())
-//         .then((data) => {
-//             console.log(data.results);
-//             data.results.forEach(element => {
-//                 const div_card = document.createElement('div');
-//                 div_card.setAttribute('class', 'card');
-
-//                 const div_row = document.createElement('div');
-//                 div_row.setAttribute('class', 'row');
-
-//                 const div_column = document.createElement('div');
-//                 div_column.setAttribute('class', 'column');
-
-//                 const image = document.createElement('img');
-//                 image.setAttribute('class', 'thumbnail');
-//                 image.setAttribute('id', 'image');
-
-//                 const title = document.createElement('h3');
-//                 title.setAttribute('id', 'title');
-
-//                 // const center = document.createElement('center');
-
-//                 title.innerHTML = `${element.title}`;
-//                 image.src = IMG_PATH + element.poster_path;
-
-//                 // center.appendChild(image);
-//                 div_card.appendChild(image);
-//                 div_card.appendChild(title);
-//                 div_column.appendChild(div_card);
-//                 div_row.appendChild(div_column);
-
-//                 main.appendChild(div_row);
-//             });
-//         })
-//         .catch(err => {
-//             console.log(err.message);
-//         })
-// };
-
-// returnMovies(API_LINK);
-
-// form.addEventListener('submit', (e) => {
-//     e.preventDefault();
-//     main.innerHTML = '';
-
-//     const searchItem = search.value;
-
-//     if (searchItem) {
-//         returnMovies(SEARCH_API + searchItem);
-//         search.value = "";
-//     }
-// });
