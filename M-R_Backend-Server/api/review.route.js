@@ -3,16 +3,19 @@ import ReviewsCtrl from './reviews.controller.js';
 
 const router = express.Router();
 
-// GET reviews for a movie (movieId is numeric)
+// Route mapping notes:
+// GET  /movie/:id   -> returns all reviews for the numeric movieId (controller: apiGetReviews)
+// POST /new        -> create a new review (controller: apiPostReview)
+// GET  /:id        -> returns a single review by its MongoDB _id (controller: apiGetReview)
+// PUT  /:id        -> update a review by _id (controller: apiUpdateReview)
+// DELETE /:id      -> delete a review by _id (controller: apiDeleteReview)
+// Important: distinguishing /movie/:id (movieId) from /:id (review _id) prevents mixing the two
+// types of identifiers and avoids the bug where a review _id was treated as a movieId.
 router.route("/movie/:id").get(ReviewsCtrl.apiGetReviews);
-
-// POST a new review
 router.route("/new").post(ReviewsCtrl.apiPostReview);
-
-// Operations on a single review by its _id
 router.route("/:id")
-    .get(ReviewsCtrl.apiGetReview) // get a single review by reviewId
-    .put(ReviewsCtrl.apiUpdateReview) // update an existing review
+    .get(ReviewsCtrl.apiGetReview)
+    .put(ReviewsCtrl.apiUpdateReview)
     .delete(ReviewsCtrl.apiDeleteReview);
 
 
