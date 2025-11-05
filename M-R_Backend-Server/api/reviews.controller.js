@@ -5,7 +5,8 @@ export default class ReviewsController {
     // post controller logic: post/create new reviews
     static async apiPostReview(req, res, next) {
         try {
-            const movieId = req.body.movieId;
+            // Ensure movieId is stored as a number; this keeps DAO queries predictable
+            const movieId = parseInt(req.body.movieId);
             const review = req.body.review;
             const user = req.body.user;
 
@@ -14,6 +15,8 @@ export default class ReviewsController {
                 user,
                 review
             )
+            // Log DAO response (contains insertedId) and return insertedId to client
+            // so the front-end or caller can reference the newly created review.
             console.log(reviewResponse);
             res.json({ status: 'success', insertedId: reviewResponse.insertedId });
         } catch (error) {
@@ -21,10 +24,11 @@ export default class ReviewsController {
         }
     }
 
-    // get controller logic: get the review based on the id
+    // get controller logic: get the review based on the review-id
     static async apiGetReview(req, res, next) {
         try {
             let id = req.params.id || {};
+            // Expect a MongoDB _id here; DAO will validate and convert it.
             let review = await ReviewDAO.getReview(id);
             if (!review) return res.status(404).json({ error: 'not found' });
             res.json(review);
@@ -41,6 +45,7 @@ export default class ReviewsController {
             const review = req.body.review;
             const user = req.body.user;
 
+            // Update by review _id. DAO validates the id and returns update result
             const reviewResponse = await ReviewDAO.updateReview(
                 reviewId,
                 user,
@@ -77,6 +82,8 @@ export default class ReviewsController {
     static async apiGetReviews(req, res, next) {
         try {
             let id = req.params.id || {};
+            // This endpoint returns an array of reviews for a numeric movieId.
+            // The DAO will do parseInt(movieId) and return an array (possibly empty).
             let reviews = await ReviewDAO.getReviewsByMovieId(id);
 
             if (!reviews) return res.status(404).json({ error: "Not found" });
