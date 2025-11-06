@@ -16,7 +16,7 @@ title.innerText = movieTitle ? decodeURIComponent(movieTitle) : 'Unknown Title';
 
 // Fetch reviews for this movieId and render them
 // Note: the server returns an array of review documents for a movie (not data.results)
-async function returnMovies() {
+async function returnReviews() {
     if (!movieId) {
         main.innerHTML = '<p>No movie selected.</p>';
         return;
@@ -66,4 +66,4 @@ async function returnMovies() {
     }
 }
 
-returnMovies();
+returnReviews();
