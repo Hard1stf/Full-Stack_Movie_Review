@@ -210,11 +210,3 @@ If you want to contribute, please fork the repo, create a feature branch, and op
 
 This project is provided as-is for learning purposes. Add an appropriate open-source license when you publish.
 
----
-
-If you want, I can:
-
-- Add a `.vscode/settings.json` with a local schema copy for `package.json` to remove the editor schema warning, or
-- Add more detailed troubleshooting steps for the Mongo TLS errors.
-
-Tell me which follow-up you'd like and I will add it to the repo.
