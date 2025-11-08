@@ -7,7 +7,7 @@ export default class ReviewDAO {
     static async injectDB(conn) {
         if (reviews) return;
         try {
-            reviews = await conn.db("reviews").collection("reviews");
+            reviews = await conn.db("movie-reviews").collection("reviews");
         } catch (error) {
             console.error(`Unable to establish collection handles in userDAO: ${error}`);
         }
